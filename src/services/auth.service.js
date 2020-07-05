@@ -2,6 +2,7 @@ import axios from "axios";
 import qs from "qs";
 
 const API_URL = "http://localhost:8090/api/security/v1/oauth/token";
+const USER_API_URL = "http://localhost:8090/api/users/v1/users";
 
 class AuthService {
     login(username, password){
@@ -30,9 +31,13 @@ class AuthService {
         sessionStorage.removeItem("user");
     }
 
-    register(username, email, password){
-        return axios.post(API_URL, {
-            username, email, password
+    register(username, email, password, name){
+        return axios.post(USER_API_URL, {
+            username, email, password, name
+        }, {
+            headers: {
+                'Authorization': 'Basic bW9iaWxlYXBwOjEyMzQ1'
+            }
         })
     }
 
