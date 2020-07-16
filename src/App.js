@@ -9,6 +9,8 @@ import AuthService from "./services/auth.service";
 import Login from "./components/login.component";
 import Register from "./components/register.component";
 import Profile from "./components/profile.component";
+import Verify from "./components/accountVerification.component.js";
+import AccountVerified from "./components/accountVerified.component.js";
 
 
 class App extends Component {
@@ -118,7 +120,10 @@ class App extends Component {
             <Switch>
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
+              <Route exact path="/verify" component={Verify} />
+              <Route exact path="/verified" component={AccountVerified} />
               <Route exact path="/profile" component={Profile} />
+              
             </Switch>
           </div>
         </div>
