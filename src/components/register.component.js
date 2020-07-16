@@ -60,6 +60,7 @@ export default class Register extends Component {
     this.onChangeName = this.onChangeName.bind(this);
 
     this.state = {
+      loading: false,
       username: "",
       email: "",
       password: "",
@@ -113,6 +114,7 @@ export default class Register extends Component {
     this.setState({
       message: "",
       successful: false,
+      loading: true
     });
 
     this.form.validateAll();
@@ -130,6 +132,7 @@ export default class Register extends Component {
           this.setState({
             message: response.data.message,
             successful: true,
+            loading: false
           });
           this.props.history.push("/verify");
         },
@@ -142,8 +145,9 @@ export default class Register extends Component {
             error.toString();
 
           this.setState({
+            loading: false,
             successful: false,
-            message: resMessage,
+            message: resMessage
           });
         }
       );
@@ -243,7 +247,14 @@ export default class Register extends Component {
                 </div>
 
                 <div className="form-group">
-                  <button className="btn btn-primary btn-block">Sign Up</button>
+                  <button 
+                    className="btn btn-primary btn-block"
+                    disabled={this.state.loading}>
+                      {this.state.loading && (
+                        <span className="spinner-border spinner-border-sm"></span>
+                      )}
+                      <span>Sign Up</span>
+                  </button>
                 </div>
               </div>
             )}
