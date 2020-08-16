@@ -6,6 +6,9 @@ import "./App.css";
 
 import AuthService from "./services/auth.service";
 
+import QuickView from "./components/todo_list/quickview.component";
+import TODOListForm from "./components/todo_list/newlistform.component";
+
 import Login from "./components/login.component";
 import Register from "./components/register.component";
 import Profile from "./components/profile.component";
@@ -123,7 +126,8 @@ class App extends Component {
               <Route exact path="/verify" component={Verify} />
               <Route exact path="/verified" component={AccountVerified} />
               <Route exact path="/profile" component={Profile} />
-              
+              <Route exact path="/quickview" component={QuickView} />
+              <Route exact path="/newlist" component={TODOListForm} />
             </Switch>
           </div>
         </div>

@@ -30,3 +30,11 @@ label {
   -webkit-border-radius: 50%;
   border-radius: 50%;
 }
+
+.table-strip-color{
+  background-color: lightblue;
+}
+
+.table-header{
+  background-color: lightslategrey;
+}

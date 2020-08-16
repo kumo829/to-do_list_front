@@ -1,8 +1,8 @@
 import axios from "axios";
 import qs from "qs";
 
-const API_URL = "http://localhost:8090/api/security/v1/oauth/token";
-const USER_API_URL = "http://localhost:8090/api/account/v1/register";
+const API_URL = "/security/v1/oauth/token";
+const USER_API_URL = "/account/v1/register";
 
 class AuthService {
   login(username, password) {
