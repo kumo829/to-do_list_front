@@ -1,5 +1,4 @@
 import axios from "axios";
-import AuthService from "./auth.service";
 
 const API_URL = "/todolists/v1/todolist";
 

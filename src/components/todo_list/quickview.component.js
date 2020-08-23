@@ -5,6 +5,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 
 import overlayFactory from "react-bootstrap-table2-overlay";
 import paginationFactory from "react-bootstrap-table2-paginator";
+import './quickview.css';
 
 export default class TODOListsQuickView extends Component {
     state = {

@@ -8,6 +8,7 @@ import AuthService from "./services/auth.service";
 
 import QuickView from "./components/todo_list/quickview.component";
 import TODOListForm from "./components/todo_list/newlistform.component";
+import TaskForm from "./components/todo_list/newtaskform.component";
 
 import Login from "./components/login.component";
 import Register from "./components/register.component";
@@ -128,6 +129,7 @@ class App extends Component {
               <Route exact path="/profile" component={Profile} />
               <Route exact path="/quickview" component={QuickView} />
               <Route exact path="/newlist" component={TODOListForm} />
+              <Route exact path="/newtask" component={TaskForm} />
             </Switch>
           </div>
         </div>
