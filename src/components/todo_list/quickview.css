@@ -1,7 +1,12 @@
 
-.table-strip-color{
-    background-color: lightblue;
+.table-strip-color1{
+    background-color: #CCE5FF;
   }
+
+  
+.table-strip-color2{
+  background-color: white;
+}
   
   .table-header{
     background-color: lightslategrey;

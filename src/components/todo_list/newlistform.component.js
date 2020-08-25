@@ -40,7 +40,7 @@ export default class TODOListForm extends Component {
     handleAddTask = (name, expiration) => {
         console.log("Name:", name);
         console.log("Expires:", expiration);
-        this.tasksList.push({ name: name, expiration: expiration });
+        this.tasksList.push({ name: name, expirationDate: expiration });
         this.setState({
             tasks: this.tasksList,
         });
@@ -176,7 +176,14 @@ export default class TODOListForm extends Component {
                         </Form>
                     )}
                 </Formik>
-
+                {this.state.message && (
+                    <div className="alert alert-danger" role="alert">
+                        <h4>Error!</h4>
+                        <p>
+                            {this.state.message}
+                        </p>
+                    </div>
+                )}
                 <TaskForm
                     addTask={this.handleAddTask}
                     cancel={this.hideModal}

@@ -5,12 +5,12 @@ import BootstrapTable from "react-bootstrap-table-next";
 
 import overlayFactory from "react-bootstrap-table2-overlay";
 import paginationFactory from "react-bootstrap-table2-paginator";
-import './quickview.css';
+import "./quickview.css";
 
 export default class TODOListsQuickView extends Component {
     state = {
         page: 1,
-        resultsPerPage: 10,
+        resultsPerPage: 25,
         totalSize: 100,
 
         loading: true,
@@ -20,14 +20,17 @@ export default class TODOListsQuickView extends Component {
             {
                 dataField: "id",
                 text: "ID",
+                hidden: true
             },
             {
                 dataField: "name",
                 text: "Name",
             },
             {
-                dataField: "completion",
-                text: "Completed (%)"
+                dataField: "completed",
+                text: "Completed (%)",
+                formatter: this.completionFormatter,
+                align: 'center'
             },
             {
                 dataField: "creationDate",
@@ -42,20 +45,51 @@ export default class TODOListsQuickView extends Component {
         ],
     };
 
+    completionFormatter(cell, row) {
+
+        var tasks = row.numberOfTask;
+        var completed = row.numberOfCompletedTasks === null ? 0 : row.numberOfCompletedTasks;
+
+        var result = tasks === 0 ? '0 %' : (completed / tasks * 100) + ' %';
+
+        return (
+            <React.Fragment>
+                {result}
+            </React.Fragment>
+        )
+    }
+
     dateFormatter(cell, row) {
+        var parts = cell.match(/\d+/g);
         return (
             <span>
-                {cell.dayOfMonth}/{cell.month.charAt(0) + cell.month.substring(1).toLowerCase()}/{cell.year} {cell.hour}:
-                {cell.minute}
+                {new Date(
+                    parts[0],
+                    parts[1] - 1,
+                    parts[2],
+                    parts[3],
+                    parts[4],
+                    parts[5]
+                ).toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                })}
             </span>
         );
     }
 
-    timeToExpireFormatter(cell, row){
-        var time = cell &&  cell.expiration ? (Date.UTC(cell.year, cell.monthValue, cell.dayOfMonth) - Date.now()) + " days" : "-";
-        return (
-            <span>{time}</span>
-        );
+    timeToExpireFormatter(cell, row) {
+        var time =
+            cell && cell.expiration
+                ? Date.UTC(cell.year, cell.monthValue, cell.dayOfMonth) -
+                  Date.now() +
+                  " days"
+                : "-";
+        return <span>{time}</span>;
     }
 
     componentDidMount() {
@@ -119,15 +153,19 @@ export default class TODOListsQuickView extends Component {
 
     rowClasses = (row, rowIndex) => {
         if (rowIndex % 2 === 0) {
-            return "";
+            return "table-strip-color1";
         }
-        return "table-strip-color";
+        return "table-strip-color2";
     };
 
     rowEvents = {
-        onClick: (e, row, rowIndex) => {
+       /*  onClick: (e, row, rowIndex) => {
             console.log(e);
-        },
+        }, */
+
+        onDoubleClick: (e, row, rowIndex) => {
+            console.log(e);
+        }
     };
 
     render() {
@@ -142,16 +180,16 @@ export default class TODOListsQuickView extends Component {
                 </button>
                 <BootstrapTable
                     remote
-                    striped
                     hover
                     bootstrap4
+                    condensed
                     keyField="id"
                     headerClasses="table-header"
                     rowClasses={this.rowClasses}
                     rowEvents={this.rowEvents}
                     data={this.state.lists}
                     page={this.state.page}
-                    sizePerPage={this.state.resultsPerPage}
+                    sizePerPage={this.state.resultsPerPage}                    
                     columns={this.state.columns}
                     loading={this.state.loading}
                     overlay={overlayFactory({
@@ -159,12 +197,14 @@ export default class TODOListsQuickView extends Component {
                         styles: {
                             overlay: (base) => ({
                                 ...base,
-                                background: "rgba(50, 50, 255, 0.5)",
+                                background: "rgba(204, 229, 255, 0.5)",
                             }),
                         },
                     })}
                     noDataIndication={this.noDataIndication()}
-                    pagination={paginationFactory({
+                    pagination={
+                        paginationFactory({
+                        sizePerPageList: [25, 50, 100],
                         sizePerPage: this.state.resultsPerPage,
                         page: this.state.page,
                         totalSize: this.state.totalSize,
