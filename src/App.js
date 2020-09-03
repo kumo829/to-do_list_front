@@ -38,6 +38,7 @@ class App extends Component {
         showModeratorBoard: false,
         showAdminBoard: false
       });
+      
     }
   }
 
@@ -56,11 +57,6 @@ class App extends Component {
               TO-DO Lists
             </Link>
             <div className="navbar-nav mr-auto">
-              <li className="nav-item">
-                <Link to={"/home"} className="nav-link">
-                  Home
-                </Link>
-              </li>
 
               {showModeratorBoard && (
                 <li className="nav-item">

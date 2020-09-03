@@ -1,15 +1,17 @@
 import React, { Component } from "react";
 
 import PropTypes from "prop-types";
-    import { Formik, Field, Form, ErrorMessage } from "formik";
-    import * as Yup from "yup";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import SweetAlert from "react-bootstrap-sweetalert";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default class TaskForm extends Component {
     state = {
         name: "",
         expires: false,
-        expirationDate: ""
+        expirationDate: "",
     };
 
     constructor(props) {
@@ -27,7 +29,28 @@ export default class TaskForm extends Component {
         });
     }
     addTask = () => {
-        this.props.addTask(this.state.name, this.state.expirationDate);
+
+        var selectedDate = "";
+
+        if (this.state.expires) {
+            const dateTimeFormat = new Intl.DateTimeFormat("en", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+            });
+            const [
+                { value: month },
+                ,
+                { value: day },
+                ,
+                { value: year },
+            ] = dateTimeFormat.formatToParts(this.state.expirationDate);
+            console.log(`${day}-${month}-${year}`);
+
+            selectedDate = `${year}-${month}-${day}`;
+        }
+
+        this.props.addTask(this.state.name, selectedDate);
         this.setState({ name: "", expires: false, expirationDate: "" });
     };
 
@@ -35,7 +58,7 @@ export default class TaskForm extends Component {
         return (
             <SweetAlert
                 title="Add a Task"
-                show={ this.props.show}
+                show={this.props.show}
                 btnSize="sm"
                 onConfirm={() => {}}
                 showConfirm={false}
@@ -58,9 +81,8 @@ export default class TaskForm extends Component {
                         this.addTask();
                     }}
                 >
-                    {({ errors, touched }) => (
+                    {({ errors, touched, setFieldValue }) => (
                         <Form className="mt-2">
-
                             <div className="row ml-2">
                                 <div className="form-group mr-2">
                                     <label
@@ -108,18 +130,37 @@ export default class TaskForm extends Component {
                                         >
                                             Expiration:
                                         </label>
-                                        <Field
-                                            type="date"
-                                            name="expirationDate"
-                                            placeholder="Expiration Date"
+                                        <DatePicker //https://stackoverflow.com/questions/56695955/how-to-use-withformik-field-with-react-datepicker
                                             className="form-control-sm mr-3"
+                                            selected={this.state.expirationDate}
+                                            name="expirationDate"
+                                            minDate={new Date()}
+                                            withPortal
+                                            showMonthDropdown
+                                            showYearDropdown
+                                            dropdownMode="select"
+                                            onChange={(date) => {
+                                                this.setState({
+                                                    expirationDate: date,
+                                                });
+                                                setFieldValue(
+                                                    "expirationDate",
+                                                    date
+                                                ); // Access it from props
+                                            }}
+                                            placeholderText="Select a date"
                                         />
                                     </div>
                                 )}
                             </div>
                             <div className="form-group row justify-content-center">
-
-                            <button type="button" className="btn btn-link" onClick={() => this.props.cancel()}>Cancel</button>
+                                <button
+                                    type="button"
+                                    className="btn btn-link"
+                                    onClick={() => this.props.cancel()}
+                                >
+                                    Cancel
+                                </button>
 
                                 <button
                                     type="submit"
@@ -143,5 +184,5 @@ export default class TaskForm extends Component {
 TaskForm.propTypes = {
     addTask: PropTypes.func.isRequired,
     cancel: PropTypes.func.isRequired,
-    show: PropTypes.bool.isRequired
+    show: PropTypes.bool.isRequired,
 };

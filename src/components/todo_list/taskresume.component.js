@@ -6,11 +6,12 @@ export default function TaskResume(props) {
         <div>
             <i className="fa fa-tasks mr-2" aria-hidden="true"></i>
             {props.name}
+            {props.expirationDate}
 
-            {props.expiration && (
+            {props.expirationDate && (
                 <span>
                     <i className="ml-4 fa fa-clock-o" aria-hidden="true"></i>
-                    <span className="ml-1">{props.expiration}</span>
+                    <span className="ml-1">{props.expirationDate}</span>
                 </span>
             )}
             <span

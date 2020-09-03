@@ -20,7 +20,7 @@ export default class TODOListsQuickView extends Component {
             {
                 dataField: "id",
                 text: "ID",
-                hidden: true
+                hidden: true,
             },
             {
                 dataField: "name",
@@ -30,33 +30,31 @@ export default class TODOListsQuickView extends Component {
                 dataField: "completed",
                 text: "Completed (%)",
                 formatter: this.completionFormatter,
-                align: 'center'
+                align: "center",
             },
             {
                 dataField: "creationDate",
                 text: "Created on",
-                formatter: this.dateFormatter
+                formatter: this.dateFormatter,
             },
             {
                 dataField: "expiration",
                 text: "Time to expire",
-                formatter: this.timeToExpireFormatter
+                formatter: this.timeToExpireFormatter,
             },
         ],
     };
 
     completionFormatter(cell, row) {
-
         var tasks = row.numberOfTask;
-        var completed = row.numberOfCompletedTasks === null ? 0 : row.numberOfCompletedTasks;
+        var completed =
+            row.numberOfCompletedTasks === null
+                ? 0
+                : row.numberOfCompletedTasks;
 
-        var result = tasks === 0 ? '0 %' : (completed / tasks * 100) + ' %';
+        var result = tasks === 0 ? "0 %" : (completed / tasks) * 100 + " %";
 
-        return (
-            <React.Fragment>
-                {result}
-            </React.Fragment>
-        )
+        return <React.Fragment>{result}</React.Fragment>;
     }
 
     dateFormatter(cell, row) {
@@ -159,13 +157,13 @@ export default class TODOListsQuickView extends Component {
     };
 
     rowEvents = {
-       /*  onClick: (e, row, rowIndex) => {
+        /*  onClick: (e, row, rowIndex) => {
             console.log(e);
         }, */
 
         onDoubleClick: (e, row, rowIndex) => {
             console.log(e);
-        }
+        },
     };
 
     render() {
@@ -189,7 +187,7 @@ export default class TODOListsQuickView extends Component {
                     rowEvents={this.rowEvents}
                     data={this.state.lists}
                     page={this.state.page}
-                    sizePerPage={this.state.resultsPerPage}                    
+                    sizePerPage={this.state.resultsPerPage}
                     columns={this.state.columns}
                     loading={this.state.loading}
                     overlay={overlayFactory({
@@ -202,8 +200,7 @@ export default class TODOListsQuickView extends Component {
                         },
                     })}
                     noDataIndication={this.noDataIndication()}
-                    pagination={
-                        paginationFactory({
+                    pagination={paginationFactory({
                         sizePerPageList: [25, 50, 100],
                         sizePerPage: this.state.resultsPerPage,
                         page: this.state.page,
