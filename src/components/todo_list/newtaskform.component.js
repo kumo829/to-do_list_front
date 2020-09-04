@@ -131,7 +131,7 @@ export default class TaskForm extends Component {
                                             Expiration:
                                         </label>
                                         <DatePicker //https://stackoverflow.com/questions/56695955/how-to-use-withformik-field-with-react-datepicker
-                                            className="form-control-sm mr-3"
+                                            className="btn btn-info btn-sm mr-3"
                                             selected={this.state.expirationDate}
                                             name="expirationDate"
                                             minDate={new Date()}

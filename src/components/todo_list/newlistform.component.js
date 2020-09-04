@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import TODOListService from "../../services/todolist.service";
 import TaskForm from "./newtaskform.component";
 import TaskResume from "./taskresume.component";
+import DatePicker from "react-datepicker";
 
 export default class TODOListForm extends Component {
     tasksList = [];
@@ -13,6 +14,8 @@ export default class TODOListForm extends Component {
         success: false,
         showNewTask: false,
         tasks: [],
+        expires: false,
+        expirationDate: "",
     };
 
     constructor(props) {
@@ -24,6 +27,10 @@ export default class TODOListForm extends Component {
         e.preventDefault();
 
         this.setState({ showNewTask: true });
+    };
+
+    handleInputCheck = (e) => {
+        this.setState({ expires: e.target.checked, expirationDate: e.target.checked ? this.state.expirationDate : "" });
     };
 
     onDeleteTask = (task) => {
@@ -53,10 +60,12 @@ export default class TODOListForm extends Component {
 
     createList = (name) => {
         this.setState({ loading: true, message: "" });
-        
-        TODOListService.newList(name, this.state.tasks).then(
+
+
+
+        TODOListService.newList(name, this.state.tasks, this.state.expirationDate).then(
             () => {
-                this.setState({ loading: false, success: true });
+                this.setState({ loading: false, success: true, expirationDate: "" });
 
                 setTimeout(() => {
                     this.setState({ success: false });
@@ -103,7 +112,7 @@ export default class TODOListForm extends Component {
                     })}
                     onSubmit={(values) => this.createList(values.name)}
                 >
-                    {({ errors, touched }) => (
+                    {({ errors, touched, setFieldValue }) => (
                         <Form>
                             <div className="form-group">
                                 <label
@@ -133,6 +142,52 @@ export default class TODOListForm extends Component {
                                     </div>
                                 )}
                             </div>
+
+                            <div className="form-group">
+                                <div className="form-check">
+                                    <label className="form-check-label">
+                                        <input
+                                            type="checkbox"
+                                            name="isExpires"
+                                            checked={this.state.expires}
+                                            onChange={this.handleInputCheck}
+                                            className="form-check-input"
+                                        />
+                                        Expires?
+                                    </label>
+                                </div>
+                            </div>
+                            {this.state.expires && (
+                                <div className="form-group ml-2">
+                                    <label
+                                        htmlFor="expirationDate"
+                                        className="sr-only form-label mr-2"
+                                    >
+                                        Expiration:
+                                    </label>
+                                    <DatePicker //https://stackoverflow.com/questions/56695955/how-to-use-withformik-field-with-react-datepicker
+                                        className="btn btn-info btn-sm mb-3"
+                                        selected={this.state.expirationDate}
+                                        name="expirationDate"
+                                        minDate={new Date()}
+                                        withPortal
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        dropdownMode="select"
+                                        onChange={(date) => {
+                                            this.setState({
+                                                expirationDate: date,
+                                            });
+                                            setFieldValue(
+                                                "expirationDate",
+                                                date
+                                            ); // Access it from props
+                                        }}
+                                        placeholderText="Select a date"
+                                    />
+                                </div>
+                            )}
+
                             <div>
                                 <h5 className="text-muted">Tasks</h5>
                             </div>
@@ -179,9 +234,7 @@ export default class TODOListForm extends Component {
                 {this.state.message && (
                     <div className="alert alert-danger" role="alert">
                         <h4>Error!</h4>
-                        <p>
-                            {this.state.message}
-                        </p>
+                        <p>{this.state.message}</p>
                     </div>
                 )}
                 <TaskForm
